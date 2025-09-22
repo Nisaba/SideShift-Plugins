@@ -1,0 +1,78 @@
+﻿<Language Name="English" IsDefault="false" IsRightToLeft="false">
+  <LocaleResource Name="Plugins.FriendlyName.SmartStore.SideShift" AppendRootKey="false">
+    <Value>SideShift</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Description.SmartStore.SideShift" AppendRootKey="false">
+    <Value>Accept Cryptocurrencies in your SmartStore shop with SideShift</Value>
+  </LocaleResource>
+  
+  <!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+  <LocaleResource Name="Plugins.FriendlyName.Payments.SideShift" AppendRootKey="false">
+    <Value>SideShift</Value>
+  </LocaleResource>
+  <!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+  <LocaleResource Name="Plugins.Description.Payments.SideShift" AppendRootKey="false">
+    <Value>Accept Cryptocurrencies in your SmartStore shop with SideShift</Value>
+  </LocaleResource>
+  
+	<LocaleResource Name="Plugins.SmartStore.SideShift" AppendRootKey="false">
+		<Children>
+		<LocaleResource Name="PrivateKey">
+			<Value>Private Key</Value>
+		</LocaleResource>
+		<LocaleResource Name="PrivateKey.Hint">
+			<Value>Your SideShift API secret key used for authentication</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleCoin">
+			<Value>Settle Coin</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleCoin.Hint">
+			<Value>The coin you want to receive (e.g., "BTC", "ETH")</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleNetwork">
+			<Value>Settle Network</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleNetwork.Hint">
+			<Value>The network of the settle coin (e.g., "mainnet")</Value>
+		</LocaleResource>
+        <LocaleResource Name="SettleMemo">
+            <Value>Settle Memo</Value>
+        </LocaleResource>
+        <LocaleResource Name="SettleMemo.Hint">
+            <Value>Required if the coin uses a memo/tag.</Value>
+        </LocaleResource>
+        <LocaleResource Name="SettleAddress">
+            <Value>Settle Address</Value>
+        </LocaleResource>
+        <LocaleResource Name="SettleAddress.Hint">
+            <Value>Your wallet address where the settlement will be sent.</Value>
+        </LocaleResource>
+        <LocaleResource Name="WebhookEnabled">
+            <Value>Webhook Enabled</Value>
+        </LocaleResource>
+        <LocaleResource Name="WebhookEnabled.Hint">
+            <Value>Flag if webhook is enabled, notifications for payment updates.</Value>
+        </LocaleResource>
+
+            <LocaleResource Name="AdminInstruction">
+        <Value>
+          <![CDATA[
+<div class="mb-1">Enter your data below to configure this plugin :</div>
+ ]]>
+	  </Value>
+      </LocaleResource>
+
+			<LocaleResource Name="PaymentInfo">
+			<Value>After completing the order you will be redirected to SideShift, where you can make the cryptocurrency payment for your order.</Value>
+		  </LocaleResource>
+      <LocaleResource Name="Agreement">
+        <Value>I agree.</Value>
+      </LocaleResource>
+      <LocaleResource Name="Agreement.Message">
+        <Value>Please agree that you will be redirect to SideShift in order to process your cryptocurrency payment.</Value>
+      </LocaleResource>
+      
+
+    </Children>
+  </LocaleResource>
+</Language>

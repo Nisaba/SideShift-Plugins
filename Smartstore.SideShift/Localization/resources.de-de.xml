@@ -1,0 +1,77 @@
+﻿<Language Name="German" IsDefault="false" IsRightToLeft="false">
+    <LocaleResource Name="Plugins.FriendlyName.SmartStore.SideShift" AppendRootKey="false">
+        <Value>SideShift</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.SmartStore.SideShift" AppendRootKey="false">
+        <Value>Akzeptieren Sie Kryptowährungen in Ihrem SmartStore-Shop mit SideShift</Value>
+    </LocaleResource>
+
+    <!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+    <LocaleResource Name="Plugins.FriendlyName.Payments.SideShift" AppendRootKey="false">
+        <Value>SideShift</Value>
+    </LocaleResource>
+    <!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+    <LocaleResource Name="Plugins.Description.Payments.SideShift" AppendRootKey="false">
+        <Value>Akzeptieren Sie Kryptowährungen in Ihrem SmartStore-Shop mit SideShift</Value>
+    </LocaleResource>
+
+    <LocaleResource Name="Plugins.SmartStore.SideShift" AppendRootKey="false">
+        <Children>
+            <LocaleResource Name="PrivateKey">
+                <Value>Privater Schlüssel</Value>
+            </LocaleResource>
+            <LocaleResource Name="PrivateKey.Hint">
+                <Value>Ihr geheimes SideShift-API-Schlüssel für die Authentifizierung</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleCoin">
+                <Value>Abrechnungswährung</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleCoin.Hint">
+                <Value>Die Kryptowährung, die Sie erhalten möchten (z. B. "BTC", "ETH")</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleNetwork">
+                <Value>Abrechnungsnetzwerk</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleNetwork.Hint">
+                <Value>Das Netzwerk der Abrechnungswährung (z. B. "mainnet")</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleMemo">
+                <Value>Abrechnungs-Memo</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleMemo.Hint">
+                <Value>Erforderlich, wenn die Kryptowährung ein Memo oder Tag verwendet.</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleAddress">
+                <Value>Abrechnungsadresse</Value>
+            </LocaleResource>
+            <LocaleResource Name="SettleAddress.Hint">
+                <Value>Ihre Wallet-Adresse, an die die Abrechnung gesendet wird.</Value>
+            </LocaleResource>
+            <LocaleResource Name="WebhookEnabled">
+                <Value>Webhook aktiviert</Value>
+            </LocaleResource>
+            <LocaleResource Name="WebhookEnabled.Hint">
+                <Value>Aktivieren, wenn Webhooks verwendet werden, um Benachrichtigungen über Zahlungsaktualisierungen zu erhalten.</Value>
+            </LocaleResource>
+
+            <LocaleResource Name="AdminInstruction">
+                <Value>
+                    <![CDATA[
+<div class="mb-1">Geben Sie unten Ihre Daten ein, um dieses Plugin zu konfigurieren:</div>
+ ]]>
+                </Value>
+            </LocaleResource>
+
+            <LocaleResource Name="PaymentInfo">
+                <Value>Nach Abschluss der Bestellung werden Sie zu SideShift weitergeleitet, wo Sie die Kryptowährungszahlung für Ihre Bestellung durchführen können.</Value>
+            </LocaleResource>
+            <LocaleResource Name="Agreement">
+                <Value>Ich stimme zu.</Value>
+            </LocaleResource>
+            <LocaleResource Name="Agreement.Message">
+                <Value>Bitte bestätigen Sie, dass Sie zu SideShift weitergeleitet werden, um Ihre Kryptowährungszahlung abzuwickeln.</Value>
+            </LocaleResource>
+
+        </Children>
+    </LocaleResource>
+</Language>

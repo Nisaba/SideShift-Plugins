@@ -1,0 +1,122 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_ConfigureProvider";
+}
+
+@await Component.InvokeAsync("StoreScope")
+
+    <widget target-zone="admin_button_toolbar_before">
+        <button id="SaveConfigButton" type="submit" name="save" class="btn btn-warning" value="save">
+            <i class="fa fa-check"></i>
+            <span>@T("Admin.Common.Save")</span>
+        </button>
+    </widget>
+
+
+    <div class="plugin-configuration">
+        <div>
+            <div class="alert alert-info alert-dismissible">
+                @Html.Raw(T("Plugins.SmartStore.SideShift.AdminInstruction"))
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        </div>
+        <div>
+            <a href="https://sideshift.ai/a/Hj0WWsdiX" target="_blank">
+                <img src="@Url.Content("~/Modules/Smartstore.SideShift/branding.png")" alt="SideShift" />
+            </a>
+        </div>
+    </div>
+
+@if (ViewBag.ViewMsgError != null)
+{
+    <div class="alert alert-danger alert-dismissible">
+        @Html.Raw(ViewBag.ViewMsgError)
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+}
+
+<form asp-action="Configure">
+    <div asp-validation-summary="ModelOnly" />
+    <div class="adminContent">
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="PrivateKey" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="PrivateKey" />
+                <span asp-validation-for="PrivateKey" />
+            </div>
+        </div>
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="SettleCoin" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="SettleCoin" />
+                <span asp-validation-for="SettleCoin" />
+            </div>
+        </div>
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="SettleNetwork" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="SettleNetwork" />
+                <span asp-validation-for="SettleNetwork" />
+            </div>
+        </div>
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="SettleAddress" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="SettleAddress" />
+                <span asp-validation-for="SettleAddress" />
+            </div>
+        </div>
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="SettleMemo" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="SettleMemo" />
+                <span asp-validation-for="SettleMemo" />
+            </div>
+        </div>
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="WebhookEnabled" />
+            </div>
+            <div class="adminData">
+                <input type="checkbox" readonly asp-for="WebhookEnabled" />
+                <span asp-validation-for="WebhookEnabled" />
+            </div>
+        </div>
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="AdditionalFee" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="AdditionalFee" sm-postfix="@ViewBag.StoreCurrencyCode" />
+                <span asp-validation-for="AdditionalFee"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="AdditionalFeePercentage" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="AdditionalFeePercentage" />
+                <span asp-validation-for="AdditionalFeePercentage"></span>
+            </div>
+        </div>
+    </div>
+
+</form>

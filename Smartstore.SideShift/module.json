@@ -1,0 +1,12 @@
+{
+  "$schema": "../module.schema.json",
+  "Group": "Payment",
+  "SystemName": "Smartstore.SideShift",
+  "FriendlyName": "Crypto payments with SideShift",
+  "Description": "This plugin enables Crypto payments with SideShift",
+  "Version": "6.0.0.0",
+  "MinAppVersion": "6.0.0",
+  "Author": "Nisaba Solutions",
+  "Order": 1,
+  "ResourceRootKey": "Plugins.Smartstore.SideShift"
+}

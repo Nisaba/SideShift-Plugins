@@ -1,0 +1,77 @@
+﻿<Language Name="Spanish" IsDefault="false" IsRightToLeft="false">
+  <LocaleResource Name="Plugins.FriendlyName.SmartStore.SideShift" AppendRootKey="false">
+    <Value>SideShift</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Description.SmartStore.SideShift" AppendRootKey="false">
+    <Value>Acepte criptomonedas en su tienda SmartStore con SideShift</Value>
+  </LocaleResource>
+  
+  <!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+  <LocaleResource Name="Plugins.FriendlyName.Payments.SideShift" AppendRootKey="false">
+    <Value>SideShift</Value>
+  </LocaleResource>
+  <!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+  <LocaleResource Name="Plugins.Description.Payments.SideShift" AppendRootKey="false">
+    <Value>Acepte criptomonedas en su tienda SmartStore con SideShift</Value>
+  </LocaleResource>
+  
+	<LocaleResource Name="Plugins.SmartStore.SideShift" AppendRootKey="false">
+		<Children>
+		<LocaleResource Name="PrivateKey">
+			<Value>Clave privada</Value>
+		</LocaleResource>
+		<LocaleResource Name="PrivateKey.Hint">
+			<Value>Su clave secreta de API de SideShift utilizada para la autenticación</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleCoin">
+			<Value>Moneda de liquidación</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleCoin.Hint">
+			<Value>La criptomoneda que desea recibir (p. ej., "BTC", "ETH")</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleNetwork">
+			<Value>Red de liquidación</Value>
+		</LocaleResource>
+		<LocaleResource Name="SettleNetwork.Hint">
+			<Value>La red de la moneda de liquidación (p. ej., "mainnet")</Value>
+		</LocaleResource>
+        <LocaleResource Name="SettleMemo">
+            <Value>Memo de liquidación</Value>
+        </LocaleResource>
+        <LocaleResource Name="SettleMemo.Hint">
+            <Value>Obligatorio si la criptomoneda utiliza un memo o etiqueta.</Value>
+        </LocaleResource>
+        <LocaleResource Name="SettleAddress">
+            <Value>Dirección de liquidación</Value>
+        </LocaleResource>
+        <LocaleResource Name="SettleAddress.Hint">
+            <Value>La dirección de su monedero donde se enviará la liquidación.</Value>
+        </LocaleResource>
+        <LocaleResource Name="WebhookEnabled">
+            <Value>Webhook habilitado</Value>
+        </LocaleResource>
+        <LocaleResource Name="WebhookEnabled.Hint">
+            <Value>Actívelo si el webhook está habilitado, para recibir notificaciones de actualizaciones de pago.</Value>
+        </LocaleResource>
+
+        <LocaleResource Name="AdminInstruction">
+        <Value>
+          <![CDATA[
+<div class="mb-1">Ingrese sus datos a continuación para configurar este complemento:</div>
+ ]]>
+	  </Value>
+      </LocaleResource>
+
+		<LocaleResource Name="PaymentInfo">
+			<Value>Después de completar el pedido, será redirigido a SideShift, donde podrá realizar el pago en criptomonedas de su pedido.</Value>
+		</LocaleResource>
+      <LocaleResource Name="Agreement">
+        <Value>Estoy de acuerdo.</Value>
+      </LocaleResource>
+      <LocaleResource Name="Agreement.Message">
+        <Value>Confirme que acepta ser redirigido a SideShift para procesar su pago en criptomonedas.</Value>
+      </LocaleResource>
+      
+    </Children>
+  </LocaleResource>
+</Language>
