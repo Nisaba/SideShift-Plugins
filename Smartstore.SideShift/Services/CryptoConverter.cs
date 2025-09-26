@@ -1,10 +1,5 @@
 ﻿using System.Text.Json;
 
-public class PaymentFailedException : Exception
-{
-    public PaymentFailedException(string message) : base(message) { }
-}
-
 public class CryptoConverter
 {
     public static async Task<decimal> GetCryptoAmountAsync(decimal fiatAmount, string fiatCurrency, string cryptoCurrency)
@@ -20,7 +15,7 @@ public class CryptoConverter
         HttpResponseMessage response = await _httpClient.GetAsync(url);
         if (!response.IsSuccessStatusCode)
         {
-            throw new PaymentFailedException("Error fetching exchange rate from CryptoCompare API");
+            throw new Exception("Error fetching exchange rate from CryptoCompare API");
         }
 
         string json = await response.Content.ReadAsStringAsync();
@@ -32,6 +27,6 @@ public class CryptoConverter
             return fiatAmount * rate;
         }
 
-        throw new PaymentFailedException("Crypto currency not found in API response");
+        throw new Exception("Crypto currency not found in API response");
     }
 }

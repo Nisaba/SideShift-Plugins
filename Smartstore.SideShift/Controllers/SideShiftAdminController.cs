@@ -48,28 +48,26 @@ namespace Smartstore.SideShift.Controllers
                 return Configure(storeId, settings);
             }
 
-            if (!settings.WebhookEnabled)
+            if (!model.WebhookEnabled)
             {
                 var myStore = _services.StoreContext.CurrentStore;
 
                 var srv = new SideShiftService();
                 try
                 {
-                    settings.WebhookEnabled = await srv.InitWebHook(myStore.Url + "SideShiftHook/Process", settings.PrivateKey);
+                    model.WebhookEnabled = await srv.InitWebHook(myStore.Url + "SideShiftHook/Process", model.PrivateKey);
                 }
                 catch (Exception ex)
                 {
-
                     HttpContext.Session.SetString("ViewMsgError", "Error during SideShift webhook creation: " + ex.Message);
-                    return Configure(storeId, settings);
                 }
             }
 
-            if (!settings.WebhookEnabled)
+           /* if (!model.WebhookEnabled)
             {
                 HttpContext.Session.SetString("ViewMsgError", "Error during SideShift webhook creation");
                 return Configure(storeId, settings);
-            }
+            }*/
 
             ModelState.Clear();
             MiniMapper.Map(model, settings);

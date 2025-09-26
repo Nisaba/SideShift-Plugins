@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Smartstore.Core.Checkout.Payment;
 using Smartstore.SideShift.Models;
 using Smartstore.Utilities;
 
@@ -12,21 +13,47 @@ namespace Smartstore.SideShift.Services
 
         public async Task<string> CreateCheckout(SideShiftRequest request, string apiSecret, string ip)
         {
-            request.affiliateId = Referal;
+            string sRep = "";
+            try
+            {
+                request.affiliateId = Referal;
 
-            using var client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-            client.DefaultRequestHeaders.Add("x-sideshift-secret", apiSecret);
-            client.DefaultRequestHeaders.Add("x-sideshift-ip", ip);
+                using var client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+                client.DefaultRequestHeaders.Add("x-sideshift-secret", apiSecret);
+                client.DefaultRequestHeaders.Add("x-sideshift-ip", ip);
+                var s = JsonSerializer.Serialize(request);
+                using var response = await client.PostAsync(
+                    "checkout",
+                    new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
+                );
+                sRep = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
 
-            using var response = await client.PostAsync(
-                "checkout",
-                new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
-            );
-
-            response.EnsureSuccessStatusCode();
-
-            using var doc = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
-            return doc.RootElement.GetProperty("id").GetString();
+                using var doc = JsonDocument.Parse(sRep);
+                return doc.RootElement.GetProperty("id").GetString();
+            }
+            catch (Exception ex)
+            {
+                var sMsg = ex.Message;
+                if (!string.IsNullOrEmpty(sRep))
+                {
+                    try
+                    {
+                        using var doc = JsonDocument.Parse(sRep);
+                        if (doc.RootElement.TryGetProperty("error", out var error))
+                        {
+                            if (error.TryGetProperty("message", out var message))
+                            {
+                                sMsg += ": " + message.GetString() ?? "";
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                throw new Exception(sMsg);
+            }
         }
 
         public async Task<bool> InitWebHook(string urlWebHook, string ApiSecret)

@@ -38,5 +38,13 @@ namespace Smartstore.SideShift.Settings
         public decimal AdditionalFee { get; set; }
 
         public bool AdditionalFeePercentage { get; set; }
+
+        public bool IsActive()
+        {
+            return !String.IsNullOrEmpty(PrivateKey) &&
+                   !String.IsNullOrEmpty(SettleCoin) &&
+                   !String.IsNullOrEmpty(SettleNetwork) &&
+                   !String.IsNullOrEmpty(SettleAddress) &&  WebhookEnabled;
+        }
     }
 }

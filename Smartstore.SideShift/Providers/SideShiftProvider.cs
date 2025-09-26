@@ -77,7 +77,6 @@ namespace Smartstore.SideShift.Providers
                 var settings = await _settingFactory.LoadSettingsAsync<SideShiftSettings>(myStore.Id);
 
                 var apiService = new SideShiftService();
-
                 var ip = GetClientIp();
                 var sCurrency = _currencyService.PrimaryCurrency.CurrencyCode ?? "USD";
                 var cryptoAmount = await CryptoConverter.GetCryptoAmountAsync(processPaymentRequest.OrderTotal, sCurrency, settings.SettleCoin);
@@ -85,7 +84,7 @@ namespace Smartstore.SideShift.Providers
                 {
                     settleCoin = settings.SettleCoin,
                     settleNetwork = settings.SettleNetwork,
-                    setlleAmount = cryptoAmount.ToString(),
+                    settleAmount = cryptoAmount,
                     settleAddress = settings.SettleAddress,
                     successUrl = myStore.Url + "checkout/completed",
                     cancelUrl = myStore.Url + "checkout",

@@ -20,6 +20,7 @@
         public string? SettleMemo { get; set; }
 
         [LocalizedDisplay("*SettleAddress")]
+        [Required]
         public string SettleAddress { get; set; }
 
         [LocalizedDisplay("*WebhookEnabled")]
