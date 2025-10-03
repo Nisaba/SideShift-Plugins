@@ -30,6 +30,11 @@ namespace Smartstore.SideShift.Settings
         public string SettleAddress { get; set; }
 
         /// <summary>
+        /// Number of decimals for the coin to be received.
+        /// </summary>
+        public ushort NbDecimalsCoin { get; set; }
+
+        /// <summary>
         /// Flag if webhook is enabled, notifications for payment updates.
         /// </summary>
         public bool WebhookEnabled { get; set; }

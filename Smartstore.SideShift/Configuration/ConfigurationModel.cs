@@ -6,22 +6,22 @@
 
         [LocalizedDisplay("*PrivateKey")]
         [Required]
-        public string PrivateKey { get; set; }
+        public string? PrivateKey { get; set; }
 
         [LocalizedDisplay("*SettleCoin")]
         [Required]
-        public string SettleCoin { get; set; }
+        public string? SettleCoin { get; set; }
 
         [LocalizedDisplay("*SettleNetwork")]
         [Required]
-        public string SettleNetwork { get; set; }
+        public string? SettleNetwork { get; set; }
 
         [LocalizedDisplay("*SettleMemo")]
         public string? SettleMemo { get; set; }
 
         [LocalizedDisplay("*SettleAddress")]
         [Required]
-        public string SettleAddress { get; set; }
+        public string? SettleAddress { get; set; }
 
         [LocalizedDisplay("*WebhookEnabled")]
         public bool WebhookEnabled { get; set; }

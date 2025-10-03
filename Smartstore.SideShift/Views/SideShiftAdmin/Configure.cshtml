@@ -35,6 +35,14 @@
     </div>
 }
 
+@if (ViewBag.ViewMsg != null)
+{
+    <div class="alert alert-success alert-dismissible">
+        @Html.Raw(ViewBag.ViewMsg)
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+}
+
 <form asp-action="Configure">
     <div asp-validation-summary="ModelOnly" />
     <div class="adminContent">
@@ -94,7 +102,7 @@
                 <smart-label asp-for="WebhookEnabled" />
             </div>
             <div class="adminData">
-                <input type="checkbox" readonly asp-for="WebhookEnabled" />
+                <input type="checkbox" disabled asp-for="WebhookEnabled" />
                 <span asp-validation-for="WebhookEnabled" />
             </div>
         </div>

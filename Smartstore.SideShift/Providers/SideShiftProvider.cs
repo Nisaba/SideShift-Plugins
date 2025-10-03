@@ -76,24 +76,24 @@ namespace Smartstore.SideShift.Providers
                 var myStore = _services.StoreContext.CurrentStore;
                 var settings = await _settingFactory.LoadSettingsAsync<SideShiftSettings>(myStore.Id);
 
-                var apiService = new SideShiftService();
                 var ip = GetClientIp();
                 var sCurrency = _currencyService.PrimaryCurrency.CurrencyCode ?? "USD";
                 var cryptoAmount = await CryptoConverter.GetCryptoAmountAsync(processPaymentRequest.OrderTotal, sCurrency, settings.SettleCoin);
+                var sUrl = myStore.Url.Replace("http://", "https://");
                 var req = new SideShiftRequest()
                 {
                     settleCoin = settings.SettleCoin,
                     settleNetwork = settings.SettleNetwork,
-                    settleAmount = cryptoAmount,
+                    settleAmount = Math.Round(cryptoAmount, settings.NbDecimalsCoin, MidpointRounding.AwayFromZero),
                     settleAddress = settings.SettleAddress,
-                    successUrl = myStore.Url + "checkout/completed",
-                    cancelUrl = myStore.Url + "checkout",
+                    successUrl = sUrl + "checkout/completed",
+                    cancelUrl = sUrl + "checkout",
                 };
                 if (!string.IsNullOrEmpty(settings.SettleMemo))
                 {
                     req.settleMemo = settings.SettleMemo;
                 }
-                result.AuthorizationTransactionResult = await apiService.CreateCheckout(req, settings.PrivateKey, ip);
+                result.AuthorizationTransactionResult = await SideShiftService.CreateCheckout(req, settings.PrivateKey, ip);
             }
             catch (Exception ex)
             {

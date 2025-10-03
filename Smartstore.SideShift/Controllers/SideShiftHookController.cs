@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -93,7 +94,7 @@ namespace Smartstore.SideShift.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Error(ex.Message);
+                Logger.Error(ex.Message + " - " + JsonSerializer.Serialize(payload));
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
         }

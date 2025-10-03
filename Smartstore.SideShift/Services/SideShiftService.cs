@@ -11,20 +11,20 @@ namespace Smartstore.SideShift.Services
         private const string BaseUrl = "https://sideshift.ai/api/v2/";
         private const string Referal = "Hj0WWsdiX";
 
-        public async Task<string> CreateCheckout(SideShiftRequest request, string apiSecret, string ip)
+        public static async Task<string> CreateCheckout(SideShiftRequest request, string apiSecret, string ip)
         {
             string sRep = "";
+            request.affiliateId = Referal;
+            string sJson = JsonSerializer.Serialize(request);
             try
             {
-                request.affiliateId = Referal;
-
                 using var client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
                 client.DefaultRequestHeaders.Add("x-sideshift-secret", apiSecret);
                 client.DefaultRequestHeaders.Add("x-sideshift-ip", ip);
-                var s = JsonSerializer.Serialize(request);
+
                 using var response = await client.PostAsync(
                     "checkout",
-                    new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
+                    new StringContent(sJson, Encoding.UTF8, "application/json")
                 );
                 sRep = await response.Content.ReadAsStringAsync();
                 response.EnsureSuccessStatusCode();
@@ -52,11 +52,45 @@ namespace Smartstore.SideShift.Services
                     {
                     }
                 }
+                sMsg += "\r\n" + sJson;
                 throw new Exception(sMsg);
             }
         }
 
-        public async Task<bool> InitWebHook(string urlWebHook, string ApiSecret)
+        public static async Task<ushort> CheckCoin(string coin, string network, string memo)
+        {
+            using var client = new HttpClient();
+            using var doc = JsonDocument.Parse(await client.GetStringAsync(BaseUrl + "coins"));
+
+            foreach (var item in doc.RootElement.EnumerateArray())
+            {
+                if (!item.TryGetProperty("coin", out var coinProp) || !string.Equals(coinProp.GetString(), coin, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var networks = item.GetProperty("networks");
+                bool foundNetwork = false;
+                foreach (var net in networks.EnumerateArray())
+                    if (string.Equals(net.GetString(), network, StringComparison.OrdinalIgnoreCase))
+                    { foundNetwork = true; break; }
+
+                if (!foundNetwork) throw new Exception($"Network '{network}' not found for coin '{coin}'");
+
+                if (item.GetProperty("hasMemo").GetBoolean() && string.IsNullOrEmpty(memo))
+                    throw new Exception($"Coin '{coin}' on network '{network}' requires a memo/tag");
+
+                if (item.TryGetProperty("tokenDetails", out var tokenDetails)
+                    && tokenDetails.TryGetProperty(network, out var networkDetails)
+                    && networkDetails.TryGetProperty("decimals", out var decimals))
+                {
+                    return (ushort)decimals.GetInt32();
+                }
+
+                return 8;
+            }
+
+            throw new Exception($"Coin '{coin}' not found");
+        }
+        public static async Task<bool> InitWebHook(string urlWebHook, string ApiSecret)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("x-sideshift-secret", ApiSecret);
