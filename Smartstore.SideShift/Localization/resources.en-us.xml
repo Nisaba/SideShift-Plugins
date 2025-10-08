@@ -1,8 +1,8 @@
 ﻿<Language Name="English" IsDefault="false" IsRightToLeft="false">
-  <LocaleResource Name="Plugins.FriendlyName.SmartStore.SideShift" AppendRootKey="false">
+  <LocaleResource Name="Plugins.FriendlyName.Smartstore.SideShift" AppendRootKey="false">
     <Value>SideShift</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.Description.SmartStore.SideShift" AppendRootKey="false">
+  <LocaleResource Name="Plugins.Description.Smartstore.SideShift" AppendRootKey="false">
     <Value>Accept Cryptocurrencies in your SmartStore shop with SideShift</Value>
   </LocaleResource>
   
@@ -15,7 +15,7 @@
     <Value>Accept Cryptocurrencies in your SmartStore shop with SideShift</Value>
   </LocaleResource>
   
-	<LocaleResource Name="Plugins.SmartStore.SideShift" AppendRootKey="false">
+	<LocaleResource Name="Plugins.Smartstore.SideShift" AppendRootKey="false">
 		<Children>
 		<LocaleResource Name="PrivateKey">
 			<Value>Private Key</Value>

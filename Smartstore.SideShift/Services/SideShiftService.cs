@@ -90,7 +90,7 @@ namespace Smartstore.SideShift.Services
 
             throw new Exception($"Coin '{coin}' not found");
         }
-        public static async Task<bool> InitWebHook(string urlWebHook, string ApiSecret)
+        public static async Task<Tuple<bool, string?>> InitWebHook(string urlWebHook, string ApiSecret)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("x-sideshift-secret", ApiSecret);
@@ -125,11 +125,55 @@ namespace Smartstore.SideShift.Services
                 throw new Exception();
             }
 
-            return doc.RootElement
+            var bFlag =  doc.RootElement
                 .GetProperty("data")
                 .GetProperty("createHook")
                 .GetProperty("enabled")
                 .GetBoolean();
+
+            var sId = string.Empty;
+            if (bFlag)
+            {
+                sId = doc.RootElement
+                .GetProperty("data")
+                .GetProperty("createHook")
+                .GetProperty("id")
+                .GetString();
+            }
+            return new Tuple<bool, string?>(bFlag, sId);
+        }
+
+        public static async Task DeleteWebHook(string hookId, string ApiSecret)
+        {
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("x-sideshift-secret", ApiSecret);
+            var query = new
+            {
+                query = $@"mutation {{
+                    deleteHook(id: ""{hookId}"")
+                }}"
+            };
+            var content = new StringContent(JsonSerializer.Serialize(query), Encoding.UTF8, "application/json");
+            using var response = await client.PostAsync("https://sideshift.ai/graphql", content);
+            response.EnsureSuccessStatusCode();
+            using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            if (doc.RootElement.TryGetProperty("errors", out var errors))
+            {
+                var firstError = errors[0];
+                if (firstError.TryGetProperty("message", out var message))
+                {
+                    throw new Exception(message.GetString() ?? "");
+                }
+                throw new Exception();
+            }
+            var bFlag = doc.RootElement
+                .GetProperty("data")
+                .GetProperty("deleteHook")
+                .GetBoolean();
+            if (!bFlag)
+            {
+                throw new Exception("Failed to delete webhook");
+            }
         }
     }
 }

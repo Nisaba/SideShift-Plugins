@@ -10,24 +10,27 @@ using Smartstore.SideShift.Settings;
 using Smartstore.Web.Controllers;
 using Smartstore.Web.Modelling.Settings;
 using Smartstore.SideShift.Models;
+using Smartstore.Core.Checkout.Payment;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Smartstore.SideShift.Controllers
 {
     [Area("Admin")]
     [Route("[area]/sideshift/{action=index}/{id?}")]
-    public class SideShiftAdminController (ICommonServices services, IProviderManager providerManager, ICurrencyService currencyService) : ModuleController
+    public class SideShiftAdminController (ICommonServices services, IProviderManager providerManager, ICurrencyService currencyService, PaymentSettings paymentSettings) : ModuleController
     {
 
         private readonly IProviderManager _providerManager = providerManager;
         private readonly ICurrencyService _currencyService = currencyService;
         private readonly ICommonServices _services = services;
+        private readonly PaymentSettings _paymentSettings = paymentSettings;
 
 
         [LoadSetting, AuthorizeAdmin]
         public IActionResult Configure(int storeId, SideShiftSettings settings)
         {
             var model = MiniMapper.Map<SideShiftSettings, ConfigurationModel>(settings);
-            ViewBag.Provider = _providerManager.GetProvider("SmartStore.SideShift").Metadata;
+            ViewBag.Provider = _providerManager.GetProvider("Smartstore.SideShift").Metadata;
             ViewBag.StoreCurrencyCode = _currencyService.PrimaryCurrency.CurrencyCode ?? "USD";
             var sViewMsgError = HttpContext.Session.GetString("ViewMsgError");
             if (!string.IsNullOrEmpty(sViewMsgError))
@@ -46,8 +49,46 @@ namespace Smartstore.SideShift.Controllers
         }
 
         [HttpPost, SaveSetting, AuthorizeAdmin]
-        public async Task<IActionResult> Configure(int storeId, ConfigurationModel model, SideShiftSettings settings)
+        public async Task<IActionResult> Configure(int storeId, ConfigurationModel model, SideShiftSettings settings, string command = null)
         {
+            if (command == "delete")
+            {
+                try
+                {
+                    if (settings.WebhookEnabled && !string.IsNullOrEmpty(settings.WebhookId) && !string.IsNullOrEmpty(settings.PrivateKey))
+                        await SideShiftService.DeleteWebHook(settings.WebhookId, settings.PrivateKey);
+                }
+                catch { }
+
+                settings.SettleMemo = "";
+                settings.SettleCoin = "";
+                settings.NbDecimalsCoin = 8;
+                settings.PrivateKey = "";
+                settings.SettleAddress = "";
+                settings.SettleNetwork = "";
+                settings.WebhookEnabled = false;
+                settings.WebhookId = "";
+                settings.AdditionalFee = 0;
+                settings.AdditionalFeePercentage = false;
+
+                ModelState.Clear();
+                _paymentSettings.ActivePaymentMethodSystemNames.Remove("Smartstore.SideShift");
+
+                //HttpContext.Session.SetString("ViewMsg", "Settings cleared and payment method deactivated");
+                HttpContext.Session.SetString("ViewMsg", "Settings cleared");
+                return Configure(storeId, settings);
+            }
+
+            if (command == "activate" && model.IsConfigured())
+            {
+                _paymentSettings.ActivePaymentMethodSystemNames.Add("Smartstore.SideShift");
+
+                await _services.SettingFactory.SaveSettingsAsync(_paymentSettings);
+
+                HttpContext.Session.SetString("ViewMsg", "Payment method activated");
+                return Configure(storeId, settings);
+            }
+
             if (!ModelState.IsValid)
             {
                 HttpContext.Session.SetString("ViewMsgError", "Incorrect data");
@@ -61,7 +102,8 @@ namespace Smartstore.SideShift.Controllers
                 try
                 {
                     var sUrl = myStore.Url.Replace("http://", "https://") + "SideShiftHook/Process";
-                    model.WebhookEnabled = await SideShiftService.InitWebHook(sUrl + "SideShiftHook/Process", model.PrivateKey);
+                    var t = await SideShiftService.InitWebHook(sUrl + "SideShiftHook/Process", model.PrivateKey);
+                    model.WebhookEnabled = t.Item1;
                 }
                 catch (Exception ex)
                 {

@@ -26,12 +26,22 @@
         [LocalizedDisplay("*WebhookEnabled")]
         public bool WebhookEnabled { get; set; }
 
+        public string? WebhookId { get; set; }
 
         [LocalizedDisplay("Admin.Configuration.Payment.Methods.AdditionalFee")]
         public decimal AdditionalFee { get; set; }
 
         [LocalizedDisplay("Admin.Configuration.Payment.Methods.AdditionalFeePercentage")]
         public bool AdditionalFeePercentage { get; set; }
+
+        public bool IsConfigured()
+        {
+            return
+                !string.IsNullOrEmpty(PrivateKey) &&
+                !string.IsNullOrEmpty(SettleCoin) &&
+                !string.IsNullOrEmpty(SettleNetwork) &&
+                !string.IsNullOrEmpty(SettleAddress);
+        }
     }
 
 

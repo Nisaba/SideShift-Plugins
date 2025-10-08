@@ -7,7 +7,7 @@ namespace Smartstore.SideShift.Components
     {
         public IViewComponentResult Invoke()
         {
-            return View("~/Modules/SmartStore.SideShift/Views/Public/PaymentInfo.cshtml");
+            return View("~/Modules/Smartstore.SideShift/Views/Public/PaymentInfo.cshtml");
         }
     }
 }

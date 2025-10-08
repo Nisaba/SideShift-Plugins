@@ -19,7 +19,7 @@ using Smartstore.SideShift.Settings;
 
 namespace Smartstore.SideShift.Providers
 {
-    [SystemName("SmartStore.SideShift")]
+    [SystemName("Smartstore.SideShift")]
     [FriendlyName("SideShift")]
     [Order(1)]
     public class PaymentProvider : PaymentMethodBase, IConfigurable
@@ -44,7 +44,7 @@ namespace Smartstore.SideShift.Providers
 
         public ILogger Logger { get; set; } = NullLogger.Instance;
 
-        public static string SystemName => "SmartStore.SideShift";
+        public static string SystemName => "Smartstore.SideShift";
         public override bool SupportCapture => false;
         public override bool SupportPartiallyRefund => false;
         public override bool SupportRefund => false;

@@ -39,6 +39,7 @@ namespace Smartstore.SideShift.Settings
         /// </summary>
         public bool WebhookEnabled { get; set; }
 
+        public string? WebhookId { get; set; }
 
         public decimal AdditionalFee { get; set; }
 
