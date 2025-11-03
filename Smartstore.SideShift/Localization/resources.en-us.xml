@@ -54,25 +54,59 @@
             <Value>Flag if webhook is enabled, notifications for payment updates.</Value>
         </LocaleResource>
 
-            <LocaleResource Name="AdminInstruction">
-        <Value>
-          <![CDATA[
-<div class="mb-1">Enter your data below to configure this plugin :</div>
- ]]>
-	  </Value>
-      </LocaleResource>
+        <LocaleResource Name="AdminInstruction">
+                <Value>
+                  <![CDATA[
+        <div class="mb-1">Enter your data below to configure this plugin :</div>
+         ]]>
+	          </Value>
+          </LocaleResource>
 
-			<LocaleResource Name="PaymentInfo">
-			<Value>After completing the order you will be redirected to SideShift, where you can make the cryptocurrency payment for your order.</Value>
-		  </LocaleResource>
-      <LocaleResource Name="Agreement">
-        <Value>I agree.</Value>
-      </LocaleResource>
-      <LocaleResource Name="Agreement.Message">
-        <Value>Please agree that you will be redirect to SideShift in order to process your cryptocurrency payment.</Value>
-      </LocaleResource>
-      
-
-    </Children>
+		  <LocaleResource Name="PaymentInfo">
+		    <Value>
+                <![CDATA[
+                <b>Pay with any cryptocurrency using SideShift.</b><br/>After placing your order, you’ll be redirected to SideShift, a secure service that lets you swap and pay with the crypto of your choice—quickly and easily.<br/>You can then follow the payment process by checking your order notes.
+                ]]>
+            </Value>
+		  </LocaleResource>     
+            
+          <LocaleResource Name="WebHookNote">
+                <Value>
+                  <![CDATA[
+<div style='font-family:Arial,sans-serif;font-size:14px;'>
+    <strong>SideShift Swap Update</strong><br/>
+    <p>
+        Your swap (<b>ID:</b> #payloadId) has been updated.<br/>
+        <b>Status:</b> #payloadStatus<br/>
+        <b>Settle Amount:</b> #payloadSettleAmount #payloadSettleCoin
+    </p>
+    <p>
+        You can track the progress of your swap at any time and contact SideShift support using the following link:<br/>
+        <a href='https://sideshift.ai/orders/#payloadId' target='_blank'>View your swap on SideShift</a>
+    </p>
+</div>         ]]>
+	          </Value>
+          </LocaleResource>
+            <LocaleResource Name="NoteRefund">
+                <Value>
+                    <![CDATA[
+                    You have received a refund for this order. The refunded amount is <strong>#refundAmount #Currency</strong>.<br/>
+                    To confirm it, please complete the refund process on SideShift <a href="#refundLink">by clicking here.</a>
+                    ]]>
+                </Value>
+            </LocaleResource>
+            <LocaleResource Name="TitleRefund">
+                <Value>Refund Request</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund">
+                <Value>A refund of #refundAmount has been granted for order no. #orderId.</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund2">
+                <Value>You will receive #cryptoRefundAmount #cryptoCode (#cryptoNetwork). To initiate the refund, please enter your receiving address.</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund3">
+                <Value>Receiving address #cryptoNetwork:</Value>
+            </LocaleResource>
+        </Children>
   </LocaleResource>
 </Language>

@@ -101,9 +101,10 @@ namespace Smartstore.SideShift.Controllers
 
                 try
                 {
-                    var sUrl = myStore.Url.Replace("http://", "https://") + "SideShiftHook/Process";
-                    var t = await SideShiftService.InitWebHook(sUrl + "SideShiftHook/Process", model.PrivateKey);
+                    var sUrl = myStore.Url.Replace("http://", "https://") + "SideShift/Hook";
+                    var t = await SideShiftService.InitWebHook(sUrl, model.PrivateKey);
                     model.WebhookEnabled = t.Item1;
+                    model.WebhookId = t.Item2;
                 }
                 catch (Exception ex)
                 {

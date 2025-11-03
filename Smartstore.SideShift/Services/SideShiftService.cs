@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.DataProtection;
 using Smartstore.Core.Checkout.Payment;
 using Smartstore.SideShift.Models;
 using Smartstore.Utilities;
@@ -57,6 +59,44 @@ namespace Smartstore.SideShift.Services
             }
         }
 
+        public static async Task<string> GetSwapInfo(string id, string apiSecret, string ip)
+        {
+            string sRep = "";
+            try
+            {
+                using var client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+                client.DefaultRequestHeaders.Add("x-sideshift-secret", apiSecret);
+                client.DefaultRequestHeaders.Add("x-sideshift-ip", ip);
+
+                var response = await client.GetAsync($"{BaseUrl}shifts/{id}/");
+                sRep = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+                return sRep;
+            }
+            catch (Exception ex)
+            {
+                var sMsg = ex.Message;
+                if (!string.IsNullOrEmpty(sRep))
+                {
+                    try
+                    {
+                        using var doc = JsonDocument.Parse(sRep);
+                        if (doc.RootElement.TryGetProperty("error", out var error))
+                        {
+                            if (error.TryGetProperty("message", out var message))
+                            {
+                                sMsg += ": " + message.GetString() ?? "";
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                throw new Exception(sMsg);
+            }
+        }
+
         public static async Task<ushort> CheckCoin(string coin, string network, string memo)
         {
             using var client = new HttpClient();
@@ -92,9 +132,11 @@ namespace Smartstore.SideShift.Services
         }
         public static async Task<Tuple<bool, string?>> InitWebHook(string urlWebHook, string ApiSecret)
         {
+#if DEBUG
+            urlWebHook = "https://webhook.site/fbc28ac3-f7ae-461c-81ef-dd5ca31b036f";
+#endif
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("x-sideshift-secret", ApiSecret);
-
             var query = new
             {
                 query = $@"mutation {{

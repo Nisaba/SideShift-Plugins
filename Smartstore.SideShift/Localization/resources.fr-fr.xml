@@ -51,7 +51,7 @@
                 <Value>Webhook activé</Value>
             </LocaleResource>
             <LocaleResource Name="WebhookEnabled.Hint">
-                <Value>Activez si le webhook est utilisé, afin de recevoir des notifications sur l’état des paiements.</Value>
+                <Value>Activé si le webhook est défini, afin de recevoir des notifications sur l’état des paiements.</Value>
             </LocaleResource>
 
             <LocaleResource Name="AdminInstruction">
@@ -63,15 +63,49 @@
             </LocaleResource>
 
             <LocaleResource Name="PaymentInfo">
-                <Value>Après avoir finalisé la commande, vous serez redirigé vers SideShift, où vous pourrez effectuer le paiement en cryptomonnaie pour votre commande.</Value>
+                <Value>
+                    <![CDATA[
+                    <b>Payez avec n’importe quelle cryptomonnaie grâce à SideShift.</b><br/>Après avoir passé votre commande, vous serez redirigé vers SideShift, un service sécurisé qui vous permet d’échanger et de payer facilement avec la crypto de votre choix.<br/>Vous pourrez ensuite suivre le processus de paiement en consultant les notes de votre commande.
+                    ]]>
+                </Value>
             </LocaleResource>
-            <LocaleResource Name="Agreement">
-                <Value>J’accepte.</Value>
+            <LocaleResource Name="WebHookNote">
+                <Value>
+                    <![CDATA[
+<div style='font-family:Arial,sans-serif;font-size:14px;'>
+    <strong>SideShift Swap (mise à jour)</strong><br/>
+    <p>
+        Votre swap (<b>ID:</b> #payloadId) a été mis à jour.<br/>
+        <b>Statut:</b> #payloadStatus<br/>
+        <b>Montant:</b> #payloadSettleAmount #payloadSettleCoin
+    </p>
+    <p>
+        Vous pouvez suivre la progression du swap à tout moment et contacter le support SideShift en suivant le lien suivant:<br/>
+        <a href='https://sideshift.ai/orders/#payloadId' target='_blank'>Voir votre swap sur SideShift</a>
+    </p>
+</div>         ]]>
+                </Value>
             </LocaleResource>
-            <LocaleResource Name="Agreement.Message">
-                <Value>Veuillez confirmer que vous acceptez d’être redirigé vers SideShift afin de procéder au paiement en cryptomonnaie.</Value>
+            <LocaleResource Name="NoteRefund">
+                <Value>
+                    <![CDATA[
+                    Vous avez reçu un remboursement pour cette commande. Le montant remboursé est de <strong>#refundAmount #Currency</strong>.<br/>
+                    Pour le valider, veuillez compléter le processus de remboursement sur SideShift <a href="#refundLink">en cliquant ici.</a>
+                    ]]>
+                </Value>
             </LocaleResource>
-
+            <LocaleResource Name="TitleRefund">
+                <Value>Demande de remboursement</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund">
+                <Value>Un remboursement d'un montant de #refundAmount vous a été accordé sur la commande n°#orderId.</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund2">
+                <Value>Vous recevrez #cryptoRefundAmount #cryptoCode (#cryptoNetwork). Pour initier le remboursement, veuillez saisir votre adresse de réception.</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund3">
+                <Value>Adresse de réception #cryptoNetwork:</Value>
+            </LocaleResource>
         </Children>
     </LocaleResource>
 </Language>

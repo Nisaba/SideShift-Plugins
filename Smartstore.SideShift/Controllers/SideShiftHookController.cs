@@ -7,6 +7,7 @@ using Smartstore.Core;
 using Smartstore.Core.Checkout.Orders;
 using Smartstore.Core.Checkout.Payment;
 using Smartstore.Core.Data;
+using Smartstore.Core.Identity;
 using Smartstore.SideShift.Models;
 using Smartstore.SideShift.Providers;
 using Smartstore.SideShift.Settings;
@@ -14,16 +15,15 @@ using Smartstore.Web.Controllers;
 
 namespace Smartstore.SideShift.Controllers
 {
+    [Route("SideShift/Hook")]
     public class SideShiftHookController : PublicController
     {
         private readonly ILogger _logger;
         private readonly SmartDbContext _db;
         private readonly SideShiftSettings _settings;
 
-        public SideShiftHookController(IOrderService orderService,
-            SideShiftSettings settings,
+        public SideShiftHookController(SideShiftSettings settings,
             SmartDbContext db,
-           ICommonServices services,
             ILogger logger)
         {
             _logger = logger;
@@ -32,7 +32,8 @@ namespace Smartstore.SideShift.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Process([FromBody] SideShiftWebhook payload)
+        [WebhookEndpoint]
+        public async Task<IActionResult> Post([FromBody] SideShiftWebhook payload)
         {
             try
             {                
@@ -84,8 +85,11 @@ namespace Smartstore.SideShift.Controllers
 
                 if (updated)
                 {
-                    order.AddOrderNote(
-                        $"SideShift {payload.Id}: Order status updated to {newOrderStatus} and payment status to {newPaymentStatus}", true);
+                    var sNote = T("Plugins.Smartstore.SideShift.WebHookNote").ToString().Replace("#payloadId", payload.Id)
+                                                                                        .Replace("#payloadStatus", payload.Status)
+                                                                                        .Replace("#payloadSettleAmount", payload.SettleAmount)
+                                                                                        .Replace("#payloadSettleCoin", payload.SettleCoin);
+                    order.AddOrderNote(sNote, true);
                     order.HasNewPaymentNotification = true;
                 }
 

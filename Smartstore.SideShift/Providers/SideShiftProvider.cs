@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AngleSharp.Dom;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -46,8 +47,8 @@ namespace Smartstore.SideShift.Providers
 
         public static string SystemName => "Smartstore.SideShift";
         public override bool SupportCapture => false;
-        public override bool SupportPartiallyRefund => false;
-        public override bool SupportRefund => false;
+        public override bool SupportPartiallyRefund => true;
+        public override bool SupportRefund => true;
         public override bool SupportVoid => false;
         public override bool RequiresInteraction => false;
         public override PaymentMethodType PaymentMethodType => PaymentMethodType.Redirection;
@@ -74,12 +75,17 @@ namespace Smartstore.SideShift.Providers
             {
 
                 var myStore = _services.StoreContext.CurrentStore;
+#if DEBUG
+                var sUrl = "https://smartstore.nisaba-solutions.com/";
+#else
+                var sUrl = myStore.Url.Replace("http://", "https://");
+#endif
+
                 var settings = await _settingFactory.LoadSettingsAsync<SideShiftSettings>(myStore.Id);
 
                 var ip = GetClientIp();
                 var sCurrency = _currencyService.PrimaryCurrency.CurrencyCode ?? "USD";
-                var cryptoAmount = await CryptoConverter.GetCryptoAmountAsync(processPaymentRequest.OrderTotal, sCurrency, settings.SettleCoin);
-                var sUrl = myStore.Url.Replace("http://", "https://");
+                var cryptoAmount = await CryptoConverter.GetCorrespondingAmountAsync(processPaymentRequest.OrderTotal, sCurrency, settings.SettleCoin);
                 var req = new SideShiftRequest()
                 {
                     settleCoin = settings.SettleCoin,
@@ -128,6 +134,30 @@ namespace Smartstore.SideShift.Providers
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+        }
+
+        public override async Task<RefundPaymentResult> RefundAsync(RefundPaymentRequest refundPaymentRequest)
+        {
+            var result = new RefundPaymentResult
+            {
+                NewPaymentStatus = refundPaymentRequest.Order.PaymentStatus
+            };
+            var sCode = Guid.NewGuid().ToString("N").Substring(0, 8);
+            refundPaymentRequest.Order.AuthorizationTransactionCode = sCode;
+
+            var sAmount = refundPaymentRequest.AmountToRefund.ToString();
+            var myStore = _services.StoreContext.CurrentStore;
+            var sUrl = myStore.Url.Replace("http://", "https://") + $"SideShift/Refund?orderId={refundPaymentRequest.Order.Id}&secret={sCode}&amount={sAmount}";
+
+            var sNote = T("Plugins.SmartStore.SideShift.NoteRefund").ToString()
+                                .Replace("#refundAmount", sAmount)
+                                .Replace("#Currency", _currencyService.PrimaryCurrency.CurrencyCode ?? "USD")
+                                .Replace("#refundLink", sUrl);
+
+            refundPaymentRequest.Order.AddOrderNote(sNote, true);
+
+
+            return result;
         }
 
         private string GetClientIp()

@@ -1,7 +1,9 @@
-﻿@model ConfigurationModel
+﻿@using Smartstore.Core.Checkout.Payment
+@model ConfigurationModel
 @{
     Layout = "_ConfigureProvider";
 }
+@inject PaymentSettings PaymentSettings
 
 @await Component.InvokeAsync("StoreScope")
 
@@ -12,11 +14,28 @@
         </button>
     </widget>
 
+    @if (Model.IsConfigured())
+    {
+        <widget target-zone="admin_button_toolbar_before">
+            <button id="DeleteConfigButton" name="command" type="submit" class="btn btn-danger" value="delete">
+                <i class="fa fa-trash"></i>
+                <span>@T("Admin.Common.Clear")</span>
+            </button>
+        </widget>
+    }
+    @if (Model.IsConfigured() && Model.WebhookEnabled && !PaymentSettings.ActivePaymentMethodSystemNames.Contains("Smartstore.SideShift"))
+    {
+        <widget target-zone="admin_button_toolbar_before">
+            <button id="ActivateMethodButton" name="command" type="submit" class="btn btn-primary" value="activate">
 
+                <span>@T("Admin.Common.Activate")</span>
+            </button>
+        </widget>
+}
     <div class="plugin-configuration">
         <div>
             <div class="alert alert-info alert-dismissible">
-                @Html.Raw(T("Plugins.SmartStore.SideShift.AdminInstruction"))
+                @Html.Raw(T("Plugins.Smartstore.SideShift.AdminInstruction"))
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         </div>

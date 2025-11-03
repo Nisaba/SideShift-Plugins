@@ -63,15 +63,49 @@
             </LocaleResource>
 
             <LocaleResource Name="PaymentInfo">
-                <Value>Nach Abschluss der Bestellung werden Sie zu SideShift weitergeleitet, wo Sie die Kryptowährungszahlung für Ihre Bestellung durchführen können.</Value>
+                <Value>
+                    <![CDATA[
+                    <b>Bezahlen Sie mit jeder Kryptowährung über SideShift.</b><br/>Nach Ihrer Bestellung werden Sie zu SideShift weitergeleitet, einem sicheren Service, mit dem Sie schnell und einfach mit der gewünschten Kryptowährung tauschen und bezahlen können.<br/>Anschließend können Sie den Zahlungsvorgang anhand Ihrer Bestellnotizen verfolgen.
+                    ]]>
+                </Value>
             </LocaleResource>
-            <LocaleResource Name="Agreement">
-                <Value>Ich stimme zu.</Value>
+            <LocaleResource Name="WebHookNote">
+                <Value>
+                    <![CDATA[
+<div style='font-family:Arial,sans-serif;font-size:14px;'>
+    <strong>SideShift Swap-Update</strong><br/>
+    <p>
+        Ihr Swap (<b>ID:</b> #payloadId) wurde aktualisiert.<br/>
+        <b>Status:</b> #payloadStatus<br/>
+        <b>Abrechnungsbetrag:</b> #payloadSettleAmount #payloadSettleCoin
+    </p>
+    <p>
+        Sie können den Fortschritt des Austauschs jederzeit verfolgen und den SideShift-Support über diesen Link kontaktieren:<br/>
+        <a href='https://sideshift.ai/orders/#payloadId' target='_blank'>Swap auf SideShift ansehen</a>
+    </p>
+</div>         ]]>
+                </Value>
             </LocaleResource>
-            <LocaleResource Name="Agreement.Message">
-                <Value>Bitte bestätigen Sie, dass Sie zu SideShift weitergeleitet werden, um Ihre Kryptowährungszahlung abzuwickeln.</Value>
+            <LocaleResource Name="NoteRefund">
+                <Value>
+                    <![CDATA[
+                    Sie haben eine Rückerstattung für diese Bestellung erhalten. Der Rückerstattungsbetrag beträgt <strong>#refundAmount #Currency</strong>.<br/>
+                    Um die Rückerstattung zu bestätigen, schließen Sie bitte den Rückerstattungsprozess auf SideShift ab, indem Sie <a href="#refundLink">hier klicken.</a>
+                    ]]>
+                </Value>
             </LocaleResource>
-
+            <LocaleResource Name="TitleRefund">
+                <Value>Rückerstattungsanfrage</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund">
+                <Value>Eine Rückerstattung in Höhe von #refundAmount wurde für die Bestellung Nr. #orderId genehmigt.</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund2">
+                <Value>Sie erhalten #cryptoRefundAmount #cryptoCode (#cryptoNetwork). Um die Rückerstattung zu starten, geben Sie bitte Ihre Empfangsadresse ein.</Value>
+            </LocaleResource>
+            <LocaleResource Name="LabelRefund3">
+                <Value>Empfangsadresse #cryptoNetwork:</Value>
+            </LocaleResource>
         </Children>
     </LocaleResource>
 </Language>
