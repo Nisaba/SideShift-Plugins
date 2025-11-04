@@ -10,6 +10,7 @@ namespace Smartstore.SideShift.Models
     {
         public int OrderId { get; set; }
         public decimal FiatAmount { get; set; }
+        public string FiatCurrency { get; set; }
         public decimal CryptoAmount { get; set; }
         public string CryptoCode { get; set; }
         public string CryptoNetwork { get; set; }

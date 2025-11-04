@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Smartstore.Core;
 using Smartstore.Core.Checkout.Payment;
+using Smartstore.Core.Common;
 using Smartstore.Core.Common.Services;
 using Smartstore.Core.Configuration;
 using Smartstore.Core.Data;
@@ -20,7 +21,6 @@ namespace Smartstore.SideShift.Controllers
     [Route("SideShift/Refund")]
     public class SideShiftRefundController(SmartDbContext db,
                                          ILogger logger,
-                                         ICurrencyService currencyService,
                                          ICommonServices services,
                                          ISettingFactory settingFactory,
                                          IHttpContextAccessor httpContext) : PublicController
@@ -28,30 +28,33 @@ namespace Smartstore.SideShift.Controllers
         private readonly ILogger _logger = logger;
         private readonly SmartDbContext _db = db;
         private readonly ICommonServices _services = services;
-        private readonly ICurrencyService _currencyService = currencyService;
         private readonly IHttpContextAccessor _httpContext = httpContext;
         private readonly ISettingFactory _settingFactory = settingFactory;
 
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int orderId, string secret, decimal amount)
+        public async Task<IActionResult> Get([FromQuery] int orderId, string secret)
         {
             var order = await _db.Orders.FirstOrDefaultAsync(x =>
                 x.Id == orderId &&
                 x.PaymentMethodSystemName == PaymentProvider.SystemName &&
-    //            x.PaymentStatus == PaymentStatus.Paid &&
+                x.PaymentStatusId == (int)PaymentStatus.Paid &&
                 x.AuthorizationTransactionCode == secret);
 
             if (order == null)
                 return NotFound();
 
+            var sDecode = CryptoUtils.Decrypt(order.AuthorizationTransactionCode, order.Id.ToString()).Split("-");
+            var amount = decimal.Parse(sDecode[0]);
+            var currency = sDecode[1];
+
             var myStore = _services.StoreContext.CurrentStore;
             var settings = await _settingFactory.LoadSettingsAsync<SideShiftSettings>(myStore.Id);
             var ip = GetClientIp();
 
-            var sSwap = await SideShiftService.GetSwapInfo(order.AuthorizationTransactionResult, settings.PrivateKey, ip);
+            //var sSwap = await SideShiftService.GetSwapInfo(order.AuthorizationTransactionResult, settings.PrivateKey, ip);
+            var sSwap = await SideShiftService.GetSwapInfo("fceb377d167f00d86cb2", settings.PrivateKey, ip);
             dynamic JsonSwap = JsonConvert.DeserializeObject<dynamic>(sSwap);
-
             string sCoin = JsonSwap.depositCoin;
             sCoin = sCoin.Replace("0", "");
 
@@ -59,7 +62,8 @@ namespace Smartstore.SideShift.Controllers
             {
                 OrderId = order.Id,
                 FiatAmount = amount,
-                CryptoAmount = await CryptoConverter.GetCorrespondingAmountAsync(amount, _currencyService.PrimaryCurrency.CurrencyCode, sCoin),
+                FiatCurrency = currency,
+                CryptoAmount = await CryptoConverter.GetCorrespondingAmountAsync(amount, currency, sCoin),
                 CryptoCode = sCoin,
                 CryptoNetwork = JsonSwap.depositNetwork,
                 Secret = secret
@@ -69,36 +73,44 @@ namespace Smartstore.SideShift.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SideShiftRefund req)
+        public async Task<IActionResult> Post([FromBody] SideShiftRefundRequest req)
         {
             try
             {
                 var order = await _db.Orders.FirstOrDefaultAsync(x =>
                     x.Id == req.OrderId &&
                     x.PaymentMethodSystemName == PaymentProvider.SystemName &&
-                    x.PaymentStatus == PaymentStatus.Paid &&
+                    x.PaymentStatusId == (int)PaymentStatus.Paid &&
                     x.AuthorizationTransactionCode == req.Secret);
                 if (order == null)
                     return NotFound();
 
+                var myStore = _services.StoreContext.CurrentStore;
+                var settings = await _settingFactory.LoadSettingsAsync<SideShiftSettings>(myStore.Id);
+                var ip = GetClientIp();
 
-                var provider = new PaymentProvider(_services, _settingFactory, _currencyService, _httpContext);
-                var refundRequest = new RefundPaymentRequest
+                var sRefundCheckout = await SideShiftService.CreateCheckout(new SideShiftRequest
                 {
-                    Order = order,
-                    AmountToRefund = new Core.Common.Money(req.FiatAmount, _currencyService.PrimaryCurrency)
-                };
-                var refundResult = await provider.RefundAsync(refundRequest);
-                order.PaymentStatus = refundResult.NewPaymentStatus;
+                    settleCoin = req.CryptoCode,
+                    settleNetwork = req.CryptoNetwork,
+                    settleAmount = req.CryptoAmount,
+                    settleAddress = req.CryptoAddress,
+                }, settings.PrivateKey, ip);
+
+                var sUrl = "https://pay.sideshift.ai/checkout/" + sRefundCheckout;
+
+                order.AddOrderNote(T("Plugins.SmartStore.SideShift.RefundSubmitted"), true);
+                order.AddOrderNote(T("Plugins.SmartStore.SideShift.RefundSubmittedAdmin").ToString().Replace("#refundUrl", sUrl), false);
+                
                 await _db.SaveChangesAsync();
-                ViewBag.Message = T("Plugins.SmartStore.SideShift.RefundSuccess").ToString();
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 ViewBag.Message = T("Plugins.SmartStore.SideShift.RefundError").ToString();
             }
-            return View("Get", new { req.OrderId, req.Secret, req.FiatAmount });
+            return View("Get", new { req.OrderId, req.Secret});
         }
 
         private string GetClientIp()

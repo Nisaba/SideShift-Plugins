@@ -89,7 +89,7 @@
             <LocaleResource Name="NoteRefund">
                 <Value>
                     <![CDATA[
-                    Sie haben eine Rückerstattung für diese Bestellung erhalten. Der Rückerstattungsbetrag beträgt <strong>#refundAmount #Currency</strong>.<br/>
+                    Sie haben eine Rückerstattung für diese Bestellung erhalten. Der Rückerstattungsbetrag beträgt <strong>#refundAmount</strong>.<br/>
                     Um die Rückerstattung zu bestätigen, schließen Sie bitte den Rückerstattungsprozess auf SideShift ab, indem Sie <a href="#refundLink">hier klicken.</a>
                     ]]>
                 </Value>
@@ -104,7 +104,19 @@
                 <Value>Sie erhalten #cryptoRefundAmount #cryptoCode (#cryptoNetwork). Um die Rückerstattung zu starten, geben Sie bitte Ihre Empfangsadresse ein.</Value>
             </LocaleResource>
             <LocaleResource Name="LabelRefund3">
-                <Value>Empfangsadresse #cryptoNetwork:</Value>
+                <Value>Empfangsadresse (#cryptoNetwork):</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundSubmitted">
+                <Value>Ihre Rückerstattungsanfrage wurde bestätigt und an den Administrator übermittelt. Sie erhalten Benachrichtigungen, sobald die Zahlung erfolgt ist.</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundSubmittedAdmin">
+                <Value>
+                    <![CDATA[
+        Die Rückerstattungsanfrage wurde vom Kunden bestätigt.<br/>
+        Bitte klicken Sie hier, um mit der Zahlung fortzufahren:<br/>
+        <a href="#refundUrl">#refundUrl</a>
+        ]]>
+                </Value>
             </LocaleResource>
         </Children>
     </LocaleResource>

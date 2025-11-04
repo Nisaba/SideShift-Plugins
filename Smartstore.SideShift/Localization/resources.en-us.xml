@@ -90,7 +90,7 @@
             <LocaleResource Name="NoteRefund">
                 <Value>
                     <![CDATA[
-                    You have received a refund for this order. The refunded amount is <strong>#refundAmount #Currency</strong>.<br/>
+                    You have received a refund for this order. The refunded amount is <strong>#refundAmount</strong>.<br/>
                     To confirm it, please complete the refund process on SideShift <a href="#refundLink">by clicking here.</a>
                     ]]>
                 </Value>
@@ -105,7 +105,19 @@
                 <Value>You will receive #cryptoRefundAmount #cryptoCode (#cryptoNetwork). To initiate the refund, please enter your receiving address.</Value>
             </LocaleResource>
             <LocaleResource Name="LabelRefund3">
-                <Value>Receiving address #cryptoNetwork:</Value>
+                <Value>Receiving address (#cryptoNetwork):</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundSubmitted">
+                <Value>Your refund request has been confirmed and submitted to the administrator. You will receive notifications when the payment is processed.</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundSubmittedAdmin">
+                <Value>
+                    <![CDATA[
+        The refund request has been confirmed by the customer.<br/>
+        Please click here to proceed with the payment:<br/>
+        <a href="#refundUrl">#refundUrl</a>
+        ]]>
+                </Value>
             </LocaleResource>
         </Children>
   </LocaleResource>

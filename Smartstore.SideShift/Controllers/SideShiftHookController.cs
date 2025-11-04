@@ -43,7 +43,7 @@ namespace Smartstore.SideShift.Controllers
 
                 if (order == null)
                 {
-                    Logger.Error("Missing order");
+                    Logger.Error("Missing order", payload);
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
                 }
 

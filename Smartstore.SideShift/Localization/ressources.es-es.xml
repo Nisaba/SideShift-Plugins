@@ -90,7 +90,7 @@
         <LocaleResource Name="NoteRefund">
             <Value>
                 <![CDATA[
-                Has recibido un reembolso por este pedido. El importe del reembolso es <strong>#refundAmount #Currency</strong>.<br/>
+                Has recibido un reembolso por este pedido. El importe del reembolso es <strong>#refundAmount</strong>.<br/>
                 Para validarlo, completa el proceso de reembolso en SideShift <a href="#refundLink">haciendo clic aquí.</a>
                 ]]>
             </Value>
@@ -105,7 +105,19 @@
             <Value>Recibirá #cryptoRefundAmount #cryptoCode (#cryptoNetwork). Para iniciar el reembolso, introduzca su dirección de recepción.</Value>
         </LocaleResource>
         <LocaleResource Name="LabelRefund3">
-            <Value>Dirección de recepción #cryptoNetwork:</Value>
+            <Value>Dirección de recepción (#cryptoNetwork):</Value>
+        </LocaleResource>
+        <LocaleResource Name="RefundSubmitted">
+            <Value>Su solicitud de reembolso ha sido confirmada y enviada al administrador. Recibirá notificaciones cuando se haya realizado el pago.</Value>
+        </LocaleResource>
+        <LocaleResource Name="RefundSubmittedAdmin">
+            <Value>
+                <![CDATA[
+        La solicitud de reembolso ha sido confirmada por el cliente.<br/>
+        Haga clic aquí para proceder con el pago:<br/>
+        <a href="#refundUrl">#refundUrl</a>
+        ]]>
+            </Value>
         </LocaleResource>
     </LocaleResource>
 </Language>

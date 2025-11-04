@@ -1,7 +1,14 @@
+
+@model SideShiftRefund
 @{
     Layout = "_Layout";
+    var label1 = T("Plugins.Smartstore.SideShift.LabelRefund").ToString().Replace("#refundAmount", Model.FiatAmount.ToString() + " " + Model.FiatCurrency)
+                                                                         .Replace("#orderId", Model.OrderId.ToString());
+    var label2 = T("Plugins.Smartstore.SideShift.LabelRefund2").ToString().Replace("#cryptoRefundAmount", Model.CryptoAmount.ToString())
+                                                                         .Replace("#cryptoCode", Model.CryptoCode)
+                                                                         .Replace("#cryptoNetwork", Model.CryptoNetwork);
+    var label3 = T("Plugins.Smartstore.SideShift.LabelRefund3").ToString().Replace("#cryptoNetwork", Model.CryptoNetwork);
 }
-@Model SideShiftRefund
 
 <div class="page">
     <div class="page-title">
@@ -9,20 +16,20 @@
     </div>
     <div class="page-body">
         <br />
-        <p>@T("Plugins.Smartstore.SideShift.LabelRefund")</p>
-        <p>@T("Plugins.Smartstore.SideShift.LabelRefund2")</p>
+        <p>@label1</p>
+        <p>@label2</p>
         <br />
 
-        <form method="post" asp-action="PostRefund" class="form-horizontal">
+        <form method="post" asp-action="Post" class="form-horizontal">
             <input type="hidden" name="OrderId" value="@Model.OrderId" />
             <input type="hidden" name="CryptoAmount" value="@Model.CryptoAmount" />
             <input type="hidden" name="CryptoCode" value="@Model.CryptoCode" />
             <input type="hidden" name="CryptoNetwork" value="@Model.CryptoNetwork" />
             <input type="hidden" name="Secret" value="@Model.Secret" /> 
             <div class="form-group">
-                <label class="control-label col-md-3">>@T("Plugins.Smartstore.SideShift.LabelRefund3")</label>
+                <label class="control-label col-md-3">@label3</label>
                 <div class="col-md-9">
-                    <input type="text" id="CryptoAddress" name="CryptoAddress" class="form-control">
+                    <input type="text" id="CryptoAddress" name="CryptoAddress" class="form-control" required>
                 </div>
             </div>
             <div class="form-group">

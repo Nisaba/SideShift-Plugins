@@ -142,16 +142,16 @@ namespace Smartstore.SideShift.Providers
             {
                 NewPaymentStatus = refundPaymentRequest.Order.PaymentStatus
             };
-            var sCode = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+            var amountToRefund = refundPaymentRequest.AmountToRefund;
+            var sCode = CryptoUtils.Encrypt($"{amountToRefund.Amount}-{amountToRefund.Currency.CurrencyCode}", refundPaymentRequest.Order.Id.ToString());
             refundPaymentRequest.Order.AuthorizationTransactionCode = sCode;
 
-            var sAmount = refundPaymentRequest.AmountToRefund.ToString();
             var myStore = _services.StoreContext.CurrentStore;
-            var sUrl = myStore.Url.Replace("http://", "https://") + $"SideShift/Refund?orderId={refundPaymentRequest.Order.Id}&secret={sCode}&amount={sAmount}";
+            var sUrl = myStore.Url.Replace("http://", "https://") + $"SideShift/Refund?orderId={refundPaymentRequest.Order.Id}&secret={sCode}";
 
             var sNote = T("Plugins.SmartStore.SideShift.NoteRefund").ToString()
-                                .Replace("#refundAmount", sAmount)
-                                .Replace("#Currency", _currencyService.PrimaryCurrency.CurrencyCode ?? "USD")
+                                .Replace("#refundAmount", amountToRefund.ToString())
                                 .Replace("#refundLink", sUrl);
 
             refundPaymentRequest.Order.AddOrderNote(sNote, true);
