@@ -17,6 +17,7 @@ using Smartstore.SideShift.Controllers;
 using Smartstore.SideShift.Models;
 using Smartstore.SideShift.Services;
 using Smartstore.SideShift.Settings;
+using static Smartstore.Core.Security.Permissions;
 
 namespace Smartstore.SideShift.Providers
 {
@@ -146,6 +147,7 @@ namespace Smartstore.SideShift.Providers
             var amountToRefund = refundPaymentRequest.AmountToRefund;
             var sCode = CryptoUtils.Encrypt($"{amountToRefund.Amount}-{amountToRefund.Currency.CurrencyCode}", refundPaymentRequest.Order.Id.ToString());
             refundPaymentRequest.Order.AuthorizationTransactionCode = sCode;
+            refundPaymentRequest.Order.AuthorizationTransactionId = refundPaymentRequest.IsPartialRefund ? PaymentStatus.PartiallyRefunded.ToString() : PaymentStatus.Refunded.ToString();
 
             var myStore = _services.StoreContext.CurrentStore;
             var sUrl = myStore.Url.Replace("http://", "https://") + $"SideShift/Refund?orderId={refundPaymentRequest.Order.Id}&secret={sCode}";
@@ -155,7 +157,7 @@ namespace Smartstore.SideShift.Providers
                                 .Replace("#refundLink", sUrl);
 
             refundPaymentRequest.Order.AddOrderNote(sNote, true);
-
+            refundPaymentRequest.Order.HasNewPaymentNotification = true;
 
             return result;
         }

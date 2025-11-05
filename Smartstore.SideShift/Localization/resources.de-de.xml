@@ -118,6 +118,12 @@
         ]]>
                 </Value>
             </LocaleResource>
+            <LocaleResource Name="RefundCanceled">
+                <Value>Ihre Rückerstattungsanfrage wurde vom Administrator storniert.</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundExecuted">
+                <Value>Ihre Rückerstattung wurde ausgeführt. Sie haben Ihre Kryptowährungen in Ihrer Wallet erhalten.</Value>
+            </LocaleResource>
         </Children>
     </LocaleResource>
 </Language>

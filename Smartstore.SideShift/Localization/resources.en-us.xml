@@ -119,6 +119,12 @@
         ]]>
                 </Value>
             </LocaleResource>
+            <LocaleResource Name="RefundCanceled">
+                <Value>Your refund request has been canceled by the administrator.</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundExecuted">
+                <Value>Your refund has been processed. You have received your crypto in your wallet.</Value>
+            </LocaleResource>
         </Children>
   </LocaleResource>
 </Language>

@@ -16,20 +16,10 @@ using Smartstore.Web.Controllers;
 namespace Smartstore.SideShift.Controllers
 {
     [Route("SideShift/Hook")]
-    public class SideShiftHookController : PublicController
+    public class SideShiftHookController(SideShiftSettings settings, SmartDbContext db) : PublicController
     {
-        private readonly ILogger _logger;
-        private readonly SmartDbContext _db;
-        private readonly SideShiftSettings _settings;
-
-        public SideShiftHookController(SideShiftSettings settings,
-            SmartDbContext db,
-            ILogger logger)
-        {
-            _logger = logger;
-            _db = db;
-            _settings = settings;
-        }
+        private readonly SmartDbContext _db = db;
+        private readonly SideShiftSettings _settings = settings;
 
         [HttpPost]
         [WebhookEndpoint]
@@ -47,7 +37,34 @@ namespace Smartstore.SideShift.Controllers
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
                 }
 
+                if (order.PaymentStatus == PaymentStatus.Refunded || order.OrderStatus == OrderStatus.Cancelled)
+                {
+                    Logger.Info("Ignoring webhook for already refunded or cancelled order", payload, order);
+                    return Ok();
+                }
 
+                if (order.PaymentStatus == PaymentStatus.Paid && !string.IsNullOrEmpty(order.AuthorizationTransactionCode))
+                {
+                    await DoRefundWebHook(payload, order);
+                }
+                else
+                {
+                    await DoPaymentWebHook(payload, order);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+        }
+
+        private async Task DoPaymentWebHook(SideShiftWebhook payload, Order order)
+        {
+            try
+            {
                 var newPaymentStatus = order.PaymentStatus;
                 var newOrderStatus = order.OrderStatus;
 
@@ -94,14 +111,44 @@ namespace Smartstore.SideShift.Controllers
                 }
 
                 await _db.SaveChangesAsync();
-                return Ok();
             }
             catch (Exception ex)
             {
-                Logger.Error(ex.Message + " - " + JsonSerializer.Serialize(payload));
-                return StatusCode(StatusCodes.Status400BadRequest);
+                Logger.LogError(ex.Message, payload, order);
+                throw;
             }
         }
 
+        private async Task DoRefundWebHook(SideShiftWebhook payload, Order order)
+        {
+            try
+            {
+                var sNote = string.Empty;
+
+                switch (payload.Status)
+                {
+                    case "cancelled":
+                        sNote = T("Plugins.SmartStore.SideShift.RefundCancelled");
+                        break;
+                    case "completed":
+                    case "settled":
+                        sNote = T("Plugins.SmartStore.SideShift.RefundExecuted");
+                        order.PaymentStatus = (PaymentStatus)Int32.Parse(order.AuthorizationTransactionId);
+                        break;
+                    default:
+                        return;
+                }
+
+                order.AddOrderNote(sNote, true);
+                order.HasNewPaymentNotification = true;
+
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message, payload, order);
+                throw;
+            }
+        }
     }
 }

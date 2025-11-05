@@ -119,5 +119,11 @@
         ]]>
             </Value>
         </LocaleResource>
+        <LocaleResource Name="RefundCanceled">
+            <Value>Su solicitud de reembolso ha sido cancelada por el administrador.</Value>
+        </LocaleResource>
+        <LocaleResource Name="RefundExecuted">
+            <Value>Su reembolso ha sido realizado. Ha recibido sus criptomonedas en su monedero.</Value>
+        </LocaleResource>
     </LocaleResource>
 </Language>

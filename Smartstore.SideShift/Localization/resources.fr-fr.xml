@@ -118,6 +118,12 @@
                     ]]>
                 </Value>
             </LocaleResource>
+            <LocaleResource Name="RefundCanceled">
+                <Value>Votre demande de remboursement a été annulée par l'administrateur</Value>
+            </LocaleResource>
+            <LocaleResource Name="RefundExecuted">
+                <Value>Votre remboursement a été effectué. Vous avez reçu vos cryptos dans votre wallet.</Value>
+            </LocaleResource>
         </Children>
     </LocaleResource>
 </Language>

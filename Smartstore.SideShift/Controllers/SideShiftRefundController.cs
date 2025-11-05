@@ -101,7 +101,8 @@ namespace Smartstore.SideShift.Controllers
 
                 order.AddOrderNote(T("Plugins.SmartStore.SideShift.RefundSubmitted"), true);
                 order.AddOrderNote(T("Plugins.SmartStore.SideShift.RefundSubmittedAdmin").ToString().Replace("#refundUrl", sUrl), false);
-                
+                order.HasNewPaymentNotification = true;
+
                 await _db.SaveChangesAsync();
 
             }
