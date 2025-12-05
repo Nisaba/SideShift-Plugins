@@ -13,7 +13,6 @@ namespace Smartstore.SideShift.Services
         private const string BaseUrl = "https://sideshift.ai/api/v2/";
         private const string Referal = "Hj0WWsdiX";
 
-        // PK Key = 5d82f5f7f37568c3d9d3882210b4ea38
         public static async Task<string> CreateCheckout(SideShiftRequest request, string apiSecret, string ip)
         {
             string sRep = "";
@@ -220,3 +219,4 @@ namespace Smartstore.SideShift.Services
         }
     }
 }
+
