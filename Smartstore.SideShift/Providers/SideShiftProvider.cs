@@ -1,5 +1,4 @@
-﻿using AngleSharp.Dom;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -17,7 +16,7 @@ using Smartstore.SideShift.Controllers;
 using Smartstore.SideShift.Models;
 using Smartstore.SideShift.Services;
 using Smartstore.SideShift.Settings;
-using static Smartstore.Core.Security.Permissions;
+//using static Smartstore.Core.Security.Permissions;
 
 namespace Smartstore.SideShift.Providers
 {

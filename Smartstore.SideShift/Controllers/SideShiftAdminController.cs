@@ -95,6 +95,7 @@ namespace Smartstore.SideShift.Controllers
                 return Configure(storeId, settings);
             }
 
+            model.WebhookEnabled = settings.WebhookEnabled;
             if (!model.WebhookEnabled)
             {
                 var myStore = _services.StoreContext.CurrentStore;
